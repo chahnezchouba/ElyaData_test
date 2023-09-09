@@ -4,6 +4,7 @@ from database import Base
 class FbPost(Base):
     __tablename__ = 'FbPosts'
     id  = Column(Integer, primary_key=True, index=True)
+    page_name = Column(String) 
     time = Column(String) 
     text = Column(String)
     image = Column(String)
