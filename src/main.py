@@ -1,15 +1,16 @@
 from fastapi import  Depends, FastAPI, Query
-from sqlalchemy.orm import Session
-from sqlalchemy.sql import text
+from sqlalchemy.orm import Session, defer
+from sqlalchemy import  text
 
+from database import SessionLocal, engine, Base
 from models import FbPost
 from scraper import scrape
-from database import SessionLocal, engine, Base
+
 
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="Facebook pages scraper")
 
 # Dependency
 def get_db():
@@ -39,10 +40,15 @@ async def scraping(page_name: str,
     
     except Exception as e :
         return str(e)
+
+@app.get('/scraped_pages')
+async def get_scraped_pages_names(db: Session = Depends(get_db)):
+    page_names = set([post.page_name for post in db.query(FbPost).all()])
+    return page_names
     
-@app.get('/pages')
+@app.get('/saved_data')
 async def check_data(db: Session = Depends(get_db)):
-    pages = db.query(FbPost).all()
-    return pages
+    data = db.query(FbPost).all()
+    return data
 
 
