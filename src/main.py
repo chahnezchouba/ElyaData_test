@@ -1,6 +1,5 @@
 from fastapi import  Depends, FastAPI, Query
-from sqlalchemy.orm import Session, defer
-from sqlalchemy import  text
+from sqlalchemy.orm import Session
 
 from database import SessionLocal, engine, Base
 from models import FbPost
@@ -38,8 +37,8 @@ async def scraping(page_name: str,
         db.commit()
         return "page scraped"
     
-    except Exception as e :
-        return str(e)
+    except Exception as error :
+        return "An exception occured :" + str(error)
 
 @app.get('/scraped_pages')
 async def get_scraped_pages_names(db: Session = Depends(get_db)):
