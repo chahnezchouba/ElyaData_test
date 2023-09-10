@@ -4,7 +4,7 @@ from datetime import datetime
 
 class FbPosts(BaseModel):
     page_name : str
-    time : str
+    time : datetime
     text : Union[str, None] = None
     image : Union[str, None] = None
     likes : Union[int, None] = None
